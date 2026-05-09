@@ -1,24 +1,20 @@
-import { ECoffeeType } from "../coffees/ECoffeeType.js";
-import { Expresso } from "../coffees/Expresso.js";
-import { IceCoffee } from "../coffees/IceCoffee.js";
 import type { ICoffee } from "../coffees/ICoffee.js";
+import { CoffeeFactory } from "./CoffeeFactory.js";
+import { DecoratorFactory } from "./DecoratorFactory.js";
 
-export class CookFactory {
+export class CookAbstractFactory {
 
-    public static async createProduct(product: any): Promise<ICoffee> {
-        const delay = (Math.floor(Math.random() * 10) + 1) * 1000;
-        
-        switch(product) {
-            case ECoffeeType.EXPRESSO:
-                return await new Promise<ICoffee>((resolve) =>
-                    setTimeout(() => resolve(new Expresso()), delay)
-                );
-            case ECoffeeType.ICE_COFFEE:
-                return await new Promise<ICoffee>((resolve) =>
-                    setTimeout(() => resolve(new IceCoffee()), delay)
-                );
-            default:
-                throw new Error("Invalid product type");
-        }
+    public async createCoffee(coffeeType: string): Promise<ICoffee> {
+        return await CoffeeFactory.createCoffee(coffeeType);
+    }
+
+    public async createDecorator(
+        coffeeType: ICoffee,
+        decorator: string
+    ): Promise<ICoffee> {
+        return await DecoratorFactory.createDecorator(
+            coffeeType,
+            decorator
+        );
     }
 };

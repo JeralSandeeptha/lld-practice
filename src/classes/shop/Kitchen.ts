@@ -1,14 +1,15 @@
-import { ECoffeeAddons } from "../coffees/ECoffeeAddons.js";
-import { IceDecorator } from "../coffees/IceDecorator.js";
-import { MilkDecorator } from "../coffees/MilkDecorator.js";
-import { SugarDecorator } from "../coffees/SugarDecorator.js";
 import type { IOrder } from "../order/IOrder.js";
-import { CookFactory } from "./CookFactory.js";
+import { CookAbstractFactory } from "./CookFactory.js";
 import type { IObserver } from "./IObserver.js";
 import type { ISubject } from "./ISubject.js";
 
 export class Kitchen implements ISubject {
   private observers: any[] = [];
+  private cookFactory: CookAbstractFactory;
+
+  constructor() {
+    this.cookFactory = new CookAbstractFactory();
+  }
 
   public subscribe(observer: any): void {
     this.observers.push(observer);
@@ -27,7 +28,7 @@ export class Kitchen implements ISubject {
       `Creating coffee: ${order.coffeeType} with add-ons: ${JSON.stringify(order.add_ons)}`,
     );
 
-    let coffee = await CookFactory.createProduct(order.coffeeType);
+    let coffee = await this.cookFactory.createCoffee(order.coffeeType);
 
     console.log(coffee);
 
@@ -42,22 +43,7 @@ export class Kitchen implements ISubject {
 
         await new Promise((resolve) => setTimeout(resolve, delay));
 
-        switch (add_on) {
-          case ECoffeeAddons.MILK:
-            coffee = new MilkDecorator(coffee);
-            break;
-
-          case ECoffeeAddons.ICE:
-            coffee = new IceDecorator(coffee);
-            break;
-
-          case ECoffeeAddons.SUGAR:
-            coffee = new SugarDecorator(coffee);
-            break;
-
-          default:
-            throw new Error("Invalid add-on");
-        }
+        coffee = await this.cookFactory.createDecorator(coffee, add_on);
       }
     }
 
