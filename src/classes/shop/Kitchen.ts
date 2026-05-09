@@ -2,6 +2,7 @@ import type { IOrder } from "../order/IOrder.js";
 import { CookAbstractFactory } from "./CookFactory.js";
 import type { IObserver } from "./IObserver.js";
 import type { ISubject } from "./ISubject.js";
+import * as uuid from "uuid";
 
 export class Kitchen implements ISubject {
   private observers: any[] = [];
@@ -55,6 +56,7 @@ export class Kitchen implements ISubject {
         add_ons: order.add_ons,
         description: `User ordered a delicious ${order.coffeeType} with ${order.add_ons.join(", ")}. We offered a ${coffee.getName()} for the user and it cost $${coffee.getPrice()}.`,
         cost: coffee.getPrice(),
+        _id: this.getUUID(),
     } as IOrder;
     
     console.log(`Coffee created: ${latestOrder.product} with add-ons: ${JSON.stringify(latestOrder.add_ons)}`);
@@ -63,5 +65,9 @@ export class Kitchen implements ISubject {
 
   public getObservers(): IObserver[] {
     return this.observers;
+  }
+
+  private getUUID(): string {
+    return uuid.v4();
   }
 }
