@@ -1,4 +1,4 @@
-import type { IPaymentStrategy } from "./IpaymentStrategy.js";
+import type { IPaymentStrategy } from "./IPaymentStrategy.js";
 
 export class PaymentStrategy {
     private strategy: IPaymentStrategy;

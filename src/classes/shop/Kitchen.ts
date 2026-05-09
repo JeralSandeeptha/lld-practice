@@ -52,11 +52,12 @@ export class Kitchen implements ISubject {
 
     // notify the observers that the coffee is ready
     const latestOrder = {
+        _id: this.getUUID(),
         product: order.coffeeType,
         add_ons: order.add_ons,
         description: `User ordered a delicious ${order.coffeeType} with ${order.add_ons.join(", ")}. We offered a ${coffee.getName()} for the user and it cost $${coffee.getPrice()}.`,
         cost: coffee.getPrice(),
-        _id: this.getUUID(),
+        paymentType: order.paymentType,
     } as IOrder;
     
     console.log(`Coffee created: ${latestOrder.product} with add-ons: ${JSON.stringify(latestOrder.add_ons)}`);

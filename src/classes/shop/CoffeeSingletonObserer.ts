@@ -1,7 +1,8 @@
 import type { ECoffeeAddons } from "../coffees/ECoffeeAddons.js";
 import type { ECoffeeType } from "../coffees/ECoffeeType.js";
-import type { ICoffee } from "../coffees/ICoffee.js";
 import type { IOrder } from "../order/IOrder.js";
+import { EPaymentType } from "../payments/IPayments.js";
+import { PaymentFactory } from "../payments/PaymentFactory.js";
 import type { IObserver } from "./IObserver.js";
 import { Kitchen } from "./Kitchen.js";
 
@@ -34,13 +35,20 @@ export class CoffeeSingletonObserer implements IObserver {
         return CoffeeSingletonObserer.instance;        
     }
 
-    public placeOrder(coffeeType: ECoffeeType, add_ons: ECoffeeAddons[]): void {
-        console.log(`New order: ${coffeeType} with add-ons: ${JSON.stringify(add_ons)}`);
-        this.kitchen.createCoffee({ coffeeType, add_ons });
+    public placeOrder(coffeeType: ECoffeeType, add_ons: ECoffeeAddons[], paymentType: EPaymentType): Promise<void> {
+        console.log(`New order: ${coffeeType} with add-ons: ${JSON.stringify(add_ons)}, will be paid with ${paymentType}`);
+        return this.kitchen.createCoffee({ coffeeType, add_ons, paymentType });
     }
 
-    public sellCoffee(coffee: ICoffee): void {
-        console.log(`Sold coffee: ${coffee.getName()} for $${coffee.getPrice()}`);
+    public sellCoffee(order: IOrder): void {
+        console.log(`Finalizing order: ${order._id} via ${order.paymentType}`);
+        
+        const paymentStrategy = PaymentFactory.createPaymentStrategy(order.paymentType);
+        paymentStrategy.pay(order.cost);
+
+        this.addFunds(order.cost);
+        this.orders = this.orders.filter((o) => o._id !== order._id);
+        console.log(`Sold coffee: ${order.product} for $${order.cost}`);
     }
 
     public getAccountBalance(): number {
