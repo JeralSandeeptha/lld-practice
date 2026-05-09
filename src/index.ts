@@ -1,38 +1,22 @@
-// client code
-// get sql databases and use them without createing their objects directly
-import { NoSQLDatabaseFactory } from "./factory/factories/NoSQLDatabaseFactory.js";
-import { SQLDatabaseFactory } from "./factory/factories/SQLDatabaseFactory.js";
+import { ECoffeeAddons } from "./classes/coffees/ECoffeeAddons.js";
+import { ECoffeeType } from "./classes/coffees/ECoffeeType.js";
+import { CoffeeSingletonObserer as CoffeeShop } from "./classes/shop/CoffeeSingletonObserer.js";
 
-// using NoSQL database factory to create NoSQL databases
-const noSqlDatabaseFactory = new NoSQLDatabaseFactory();
+// create shop
+const coffeeShop = CoffeeShop.getInstance();
 
-const mongoDB = noSqlDatabaseFactory.createDatabase("MongoDb");
-mongoDB.connect(); 
-mongoDB.disconnect();
+// add funds and check the balance
+coffeeShop.addFunds(100000);
+console.log(`Account Balance: $${coffeeShop.getAccountBalance()}`);
 
-const mariaDB = noSqlDatabaseFactory.createDatabase("MariaDb");
-mariaDB.connect();
-mariaDB.disconnect();
+// withdraw funds for products and shop renovations
+coffeeShop.withdrawFunds(50000);
+console.log(`Account Balance: $${coffeeShop.getAccountBalance()}`);
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+// subscribe the kitchen then it can get updates from the kitchen
+coffeeShop.subscribeKitchen();
 
-// using SQL database factory to create SQL databases
-const sqlDatabaseFactory = new SQLDatabaseFactory();
+coffeeShop.placeOrder(ECoffeeType.EXPRESSO, [ECoffeeAddons.MILK, ECoffeeAddons.SUGAR, ECoffeeAddons.ICE]);
+coffeeShop.placeOrder(ECoffeeType.ICE_COFFEE, [ECoffeeAddons.SUGAR]);
 
-const mySQLDatabase = sqlDatabaseFactory.createDatabase("MySql");
-mySQLDatabase.connect();
-mySQLDatabase.disconnect();
-
-const postgreSQLDatabase = sqlDatabaseFactory.createDatabase("PostgreSql");
-postgreSQLDatabase.connect();
-postgreSQLDatabase.disconnect();
-
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+console.log(coffeeShop);
