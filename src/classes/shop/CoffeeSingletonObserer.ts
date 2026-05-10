@@ -44,7 +44,7 @@ export class CoffeeSingletonObserer implements IObserver {
         console.log(`Finalizing order: ${order._id} via ${order.paymentType}`);
         
         const paymentStrategy = PaymentFactory.createPaymentStrategy(order.paymentType);
-        paymentStrategy.pay(order.cost);
+        paymentStrategy.payAmount(order.cost);
 
         this.addFunds(order.cost);
         this.orders = this.orders.filter((o) => o._id !== order._id);
