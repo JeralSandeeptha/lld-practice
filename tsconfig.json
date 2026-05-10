@@ -11,6 +11,9 @@
     },
     {
       "path": "./apps"
+    },
+    {
+      "path": "./apps/coffeeshop"
     }
   ]
 }
