@@ -37,7 +37,8 @@
     "coffeeshop",
     "coffeeshop-e2e",
     "apps",
-    "apps/*"
+    "apps/*",
+    "elevator"
   ],
   "dependencies": {
     "axios": "^1.6.0",
