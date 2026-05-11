@@ -40,6 +40,7 @@
     "apps/*"
   ],
   "dependencies": {
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "chalk": "^5.6.2"
   }
 }
