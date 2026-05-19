@@ -23,6 +23,9 @@
     },
     {
       "path": "./apps/elevator"
+    },
+    {
+      "path": "./apps/meeting-schedular"
     }
   ]
 }
